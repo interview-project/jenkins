@@ -1,0 +1,12 @@
+---
+name: test_cookbook-checks
+title: Test cookbook InSpec Profile
+copyright: 2018, Salesforce, Inc.
+license: All Rights Reserved
+summary: An InSpec Compliance Profile that acts as a test case for basic chef SDLC
+version: 0.1.0
+
+depends:
+  - name: 'test_inspec'
+    git: 'git@github.exacttarget.com:chef-inspec/test_inspec.git'
+    branch: 'master'

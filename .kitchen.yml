@@ -1,0 +1,25 @@
+---
+driver:
+  name: vagrant
+  gui: false
+
+provisioner:
+  name: chef_zero
+  always_update_cookbooks: true
+  environments_path: 'test/environments'
+  client_rb:
+    environment: 'dev'
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: ubuntu/xenial64
+    driver_config:
+      network:
+      - ["forwarded_port", {guest: 8080, host: 8080}]
+
+suites:
+  - name: jenkins
+    run_list:
+      - recipe[jenkins::default]
