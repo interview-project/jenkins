@@ -38,24 +38,49 @@ end
 apt_package 'jenkins'
 apt_package 'haproxy'
 
-# Ensure services started
-service 'jenkins' do
-  action [:start, :enable]
+# Create init.groovy.d directory
+directory '/var/lib/jenkins/init.groovy.d'
+
+# Add Init Scripts
+remote_directory '/var/lib/jenkins/init.groovy.d/' do
+  source 'init-scripts'
+  owner 'jenkins'
+  group 'jenkins'
+  mode '0755'
+  files_owner 'jenkins'
+  files_group 'jenkins'
+  files_mode '0755'
+  action :create
 end
 
-service 'haproxy' do
-  action [:start, :enable]
+# Add some much-needed plugins
+remote_directory '/var/lib/jenkins/plugins' do
+  source 'plugins'
+  owner 'jenkins'
+  group 'jenkins'
+  mode '0755'
+  files_owner 'jenkins'
+  files_group 'jenkins'
+  files_mode '0755'
+  action :create
 end
+
+# Add interview-project Github org.
+remote_directory '/var/lib/jenkins/jobs' do
+  source 'jobs'
+  owner 'jenkins'
+  group 'jenkins'
+  mode '0755'
+  files_owner 'jenkins'
+  files_group 'jenkins'
+  files_mode '0755'
+  action :create
+end
+
 
 # Configure HAProxy to forward requests on port 80 to 8080 (Jenkins)
 cookbook_file '/etc/haproxy/haproxy.cfg' do
   notifies :restart, 'service[haproxy]', :immediately
-end
-
-# Configure Jenkins to skip the initial admin setup wizard
-directory '/var/lib/jenkins/init.groovy.d'
-cookbook_file '/var/lib/jenkins/init.groovy.d/skip-initial-setup.groovy' do
-  notifies :restart, 'service[jenkins]', :delayed
 end
 
 # Disable Security (Would NOT do this in real life, this is only to make demoing easier)
@@ -63,4 +88,13 @@ cookbook_file '/var/lib/jenkins/config.xml' do
   notifies :restart, 'service[jenkins]', :delayed
 end
 
+# Ensure services started
+service 'jenkins' do
+  action [:start, :enable]
+end
+
+# Start HAProxy
+service 'haproxy' do
+  action [:start, :enable]
+end
 
