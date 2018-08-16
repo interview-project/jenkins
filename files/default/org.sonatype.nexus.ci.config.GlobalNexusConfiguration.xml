@@ -5,7 +5,7 @@
       <id>nexus</id>
       <internalId>nexus</internalId>
       <displayName>nexus</displayName>
-      <serverUrl>http://nexus:8081/</serverUrl>
+      <serverUrl>http://nexus.dev.local:8081/</serverUrl>
       <credentialsId>nexus</credentialsId>
     </org.sonatype.nexus.ci.config.Nxrm3Configuration>
   </nxrmConfigs>
